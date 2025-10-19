@@ -35,20 +35,20 @@
     </header>
 
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <main class="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Title Section -->
         <div class="text-center mb-8">
-            <h2 id="title" class="text-2xl font-semibold text-gray-800 mb-2">Interactive Scatterplot Graph</h2>
-            <p class="text-gray-600">Hover over points to see detailed information</p>
+            <h2 id="title" class="text-2xl font-semibold text-gray-800 mb-2">Interactive Heat Map</h2>
+            <p id="description" class="text-gray-600">Hover over points to see detailed information</p>
         </div>
 
         <!-- Chart Container -->
         <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-            <div class="flex flex-col lg:flex-row gap-6">
+            <div class="flex flex-col gap-6">
                 <!-- Chart Area -->
-                <div class="flex-1">
-                    <div class="bg-gray-50 rounded-lg p-4 min-h-[500px] flex flex-col items-center justify-center">
-                        <div id="chart-container" class="w-full h-full">
+                <div class="w-full overflow-hidden">
+                    <div class="bg-gray-50 rounded-lg p-4 min-h-[500px] flex flex-col items-center justify-center overflow-x-auto">
+                        <div id="chart-container" class="w-full min-w-[1200px] h-full">
                             <!-- D3.js chart will be rendered here -->
                             <div class="text-center text-gray-500">
                                 <div class="animate-pulse">
@@ -58,53 +58,63 @@
                                 <p class="mt-4">Loading chart...</p>
                             </div>
                         </div>
-                        <div id="legend" class="flex gap-4 mt-2 ">
-                            <div class="flex items-center gap-2">
-                                <div class="w-4 h-4 bg-teal-500"></div>
-                                <span>Riders without doping allegations</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <div class="w-4 h-4 bg-orange-500"></div>
-                                <span>Riders with doping allegations</span>
-                            </div>
-                        </div>
+                        <svg id='legend'>
+                            <g>
+                                <rect x="10" y="0" width="40" height="40" fill="SteelBlue"></rect>
+                                <text x="60" y="20" class="fill-gray-600">Variance of -1 or less</text>
+                            </g>
+                            <g>
+                                <rect x="10" y="40" width="40" height="40" fill="LightSteelBlue"></rect>
+                                <text x="60" y="60" class="fill-gray-600">On or Below Average</text>
+                            </g>
+                            <g>
+                                <rect x="10" y="80" width="40" height="40" fill="Orange"></rect>
+                                <text x="60" y="100" class="fill-gray-600">Above Average</text>
+                            </g>
+                            <g>
+                                <rect x="10" y="120" width="40" height="40" fill="Crimson"></rect>
+                                <text x="60" y="140" class="fill-gray-600">Variance of +1 or more</text>
+                            </g>
+                        </svg>
                     </div>
                 </div>
 
                 <!-- Info Panel -->
-                <div class="lg:w-80">
-                    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-6 border border-blue-100">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
+                    <div class="col-span-2 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-6 border border-blue-100">
                         <h3 class="text-lg font-semibold text-gray-800 mb-4">Chart Information</h3>
                         
-                        <!-- Data Summary -->
-                        <div class="space-y-3 mb-6">
-                            <div class="flex justify-between items-center">
-                                <span class="text-sm text-gray-600">Total Items:</span>
-                                <span id="total-items" class="text-sm font-medium text-gray-800">-</span>
+                        <div class="grid lg:grid-cols-2 gap-6 items-center ">
+                            <!-- Data Summary -->
+                            <div class="space-y-3 mb-6">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-600">Total Items:</span>
+                                    <span id="total-items" class="text-sm font-medium text-gray-800">-</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-600">Max Value:</span>
+                                    <span id="max-value" class="text-sm font-medium text-gray-800">-</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-600">Min Value:</span>
+                                    <span id="min-value" class="text-sm font-medium text-gray-800">-</span>
+                                </div>
                             </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-sm text-gray-600">Max Value:</span>
-                                <span id="max-value" class="text-sm font-medium text-gray-800">-</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-sm text-gray-600">Min Value:</span>
-                                <span id="min-value" class="text-sm font-medium text-gray-800">-</span>
-                            </div>
-                        </div>
-
-                        <!-- Selected Item Info -->
-                        <div class="border-t border-blue-200 pt-4">
-                            <h4 class="text-sm font-medium text-gray-700 mb-2">Blocked Item</h4>
-                            <div id="blocked-info" class="text-sm text-gray-600">
-                                Click a bar to block details
+    
+                            <!-- Selected Item Info -->
+                            <div class="border-t lg:border-t-0 lg:border-l border-blue-200 pt-4 lg:pt-0 lg:pl-4 h-full">
+                                <h4 class="text-sm font-medium text-gray-700 mb-2">Blocked Item</h4>
+                                <div id="blocked-info" class="text-sm text-gray-600">
+                                    Click a bar to block details
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Controls -->
-                    <div class="mt-4 bg-white rounded-lg p-4 border border-gray-200">
+                    <div id="tooltip" class="h-full bg-white rounded-lg p-4 border border-gray-200 hidden">
                         <h4 class="text-sm font-medium text-gray-700 mb-3">Current Selection</h4>
-                        <div id="tooltip" class="text-sm text-gray-600 hidden">
+                        <div id="tooltip-label" class="text-sm text-gray-600">
                         </div>
                     </div>
                 </div>
